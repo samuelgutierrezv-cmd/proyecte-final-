@@ -1,57 +1,22 @@
 package org.samuel.models;
 import  java.util.ArrayList;
 
-public class Profesor {
-    private String codigo;
-    private String nombres;
-    private String apellidos;
+public class Profesor  extends  Persona{
     private String especialidad;
-    private String email;
     private ArrayList<Cursos> cursosAsignados;
 
     public Profesor(String codigo, String nombres, String apellidos, String email, String especialidad) {
-        this.codigo = codigo;
-        this.nombres = nombres;
-        this.apellidos = apellidos;
-        this.email = email;
+        super(nombres,apellidos,email,codigo);
         this.especialidad = especialidad;
         this.cursosAsignados = new ArrayList<>();
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public String getNombres() {
-        return nombres;
-    }
-
-    public String getApellidos() {
-        return apellidos;
     }
 
     public String getEspecialidad() {
         return especialidad;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public ArrayList<Cursos> getCursosAsignados() {
         return cursosAsignados;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
     }
 
     public void setEspecialidad(String especialidad) {
@@ -62,16 +27,20 @@ public class Profesor {
         this.cursosAsignados = cursosAsignados;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public boolean puedeaAsignarCurso(){
+        if(this.getCursosAsignados().size() < 7){
+            return true;
+        }else{
+           return false;
+        }
     }
 
-    public void asignarCurso(Cursos curso){
-        if(this.getCursosAsignados().size() <= 7){
-            this.getCursosAsignados().add(curso);
-        }else{
-           System.out.println("no se puede ingresar curso limite de cursos. ");
-        }
+    public void mostrarInformacion(){
+        System.out.println("----------------Informacion---------------");
+        System.out.println("Nombre profe: " + this.getNombre());
+        System.out.println("Apellido profe: " + this.getApellidos());
+        System.out.println("Codigo de profe: " + this.getCodigo());
+        System.out.println("Especialidad: " + this.getEspecialidad());
     }
 
     public int obtenerCargaAcadamica(){
@@ -80,17 +49,5 @@ public class Profesor {
             contador += this.getCursosAsignados().get(i).getNumeroHorasSemestre();
         }
         return contador;
-    }
-
-    public void desasignarCurso(String curso) {
-        int contador = 0;
-        while (contador < this.getCursosAsignados().size()) {
-            if (this.getCursosAsignados().get(contador).getNombre() == curso) {
-                this.getCursosAsignados().remove(contador);
-            } else {
-                System.out.println("no se puede ingresar curso limite de cursos. ");
-            }
-            contador++;
-        }
     }
 }

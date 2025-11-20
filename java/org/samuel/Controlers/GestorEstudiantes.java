@@ -4,6 +4,7 @@ import org.samuel.Validador.Carreras;
 import org.samuel.Validador.Validaciones;
 import org.samuel.models.Estudiante;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class GestorEstudiantes {
@@ -39,11 +40,12 @@ public class GestorEstudiantes {
         return validaciones;
     }
 
+    //Busca estudiantes por codigo en la lista de estudiantes
+
     public Estudiante buscarCodigo(String codigo) {
         Estudiante estudiante = null;
         boolean validador = true;
         while(validador){
-            codigo = this.getValidaciones().codigo("ingresa el codigo de nuevo: ");
             for (int i = 0; i < this.getListaEstudiantes().size(); i++){
                 if (this.getListaEstudiantes().get(i).getCodigo().equalsIgnoreCase(codigo)) {
                     System.out.println("estudiante encontrado: ");
@@ -52,6 +54,7 @@ public class GestorEstudiantes {
             }
             if(estudiante == null ){
                 System.out.println("Estudiante no encontrado encontrado: ");
+                return estudiante;
             }else{
                 System.out.println("Estudiante encontrado:");
                 return estudiante;
@@ -59,6 +62,9 @@ public class GestorEstudiantes {
         }
         return estudiante;
     }
+
+    //Realiza una lista de estudiantes con la misma carrera.
+
     public ArrayList<Estudiante> buscarPorCarrera(){
         ArrayList<Estudiante> estudiante = null;
         Carreras carreras = this.getValidaciones().ingresarCarrera();
@@ -75,47 +81,43 @@ public class GestorEstudiantes {
             return estudiante;
         }
     }
-    public void mostrarEtudiantesListados(ArrayList<Estudiante> listado){
+
+    //muestra la lista de los estudiantes con la misma carrera o la lista que se ingrese
+
+    public void mostrarEstudiantesListados(ArrayList<Estudiante> listado){
         Carreras carreras = this.getValidaciones().ingresarCarrera();
         System.out.println("--------Estudiantes registrados en la carrera "+ carreras + "---------");
         for(int i = 0 ; i < listado.size(); i++){
-            System.out.println(listado.get(i).getNombres());
-            System.out.println(listado.get(i).getCodigo());
-            System.out.println(listado.get(i).getCarrera());
+            listado.get(i).informacion();
         }
     }
-    public boolean actulizarEstudiantes(String codigo, Estudiante datos){
+
+    // actual la informacion de un estudiante
+
+    public void actualizarEstudiantes(String codigo){
         boolean validador = false;
         for(int i = 0; i < this.getListaEstudiantes().size(); i++){
             if(this.getListaEstudiantes().get(i).getCodigo().equalsIgnoreCase(codigo)){
-                this.setListaEstudiantes(datos,i);
+                Carreras carrera = this.getValidaciones().ingresarCarrera();
+                int semestre =  this.getValidaciones().rango(1,11,"ingresa el semestre del " + i + " estudiante: " );
+                String email =  this.getValidaciones().email("Ingresa el email del " + i + " estudiante: ");
+                this.getListaEstudiantes().get(i).setCarrera(carrera);
+                this.getListaEstudiantes().get(i).setEmail(email);
+                this.getListaEstudiantes().get(i).setSemestreActual(semestre);
                 validador = true;
+            }else if(getListaEstudiantes() == null || getListaEstudiantes().size() == 0){
+                validador = false;
             }
         }
-        if(validador = false){
-            System.out.println("lo se ha hecho el cambio porue no se ha encontrado el estudiantes.");
-            return validador;
+        if(validador == false){
+            System.out.println("No se ha echo el cambio porue no se ha encontrado el estudiantes.");
         }else{
             System.out.println("Se ha hecho el cambio exitosamente.");
-            return validador;
         }
     }
-    public boolean eliminarEtudiante(String codigo){
-        boolean validador = false;
-        for (int i = 0; i< this.getListaEstudiantes().size(); i++) {
-            if(this.getListaEstudiantes().get(i).getCodigo() == codigo){
-                this.getListaEstudiantes().remove(i);
-                validador = true;
-            }
-        }
-        if(validador = false){
-            System.out.println("no se encontró el estudiantes no se ha podido eliminar.");
-            return  validador;
-        }else{
-            System.out.println("Se ha hecho el cambio exitosamente.");
-            return validador;
-        }
-    }
+
+    //Este no se uso pero era para mostrar todos estudiantes de la lista por si un recuento.
+
     public void mostrarEtudiantes(){
         for (int i = 0; i< this.getListaEstudiantes().size(); i++) {
             this.getListaEstudiantes().get(i).informacion();

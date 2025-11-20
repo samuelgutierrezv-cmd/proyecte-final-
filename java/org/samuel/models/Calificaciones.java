@@ -1,33 +1,27 @@
 package org.samuel.models;
 
+import org.samuel.Controlers.ControlerCursos;
+import org.samuel.Controlers.ControlerInscripciones;
+import org.samuel.Controlers.ControlerProfesor;
 import org.samuel.Validador.EstadoCalificaiones;
+import org.samuel.Validador.EstadoIncripcion;
+import org.samuel.Validador.Validaciones;
 
 public class Calificaciones {
     private String codigoInscripcion;
-    private double nota1;
-    private double nota2;
+    private double[] notas= {0.0,0.0,0.0};
     private double notaFinal;
     private double promedioFinal;
     private EstadoCalificaiones estado;
 
-    public Calificaciones(String codigoInscripcion, double nota1, double nota2, double notaFinal, double promedioFinal) {
+    public Calificaciones(String codigoInscripcion) {
         this.codigoInscripcion = codigoInscripcion;
-        this.nota1 = nota1;
-        this.nota2 = nota2;
-        this.notaFinal = notaFinal;
-        this.promedioFinal = promedioFinal;
+        this.notaFinal = 0.0;
+        this.promedioFinal = 0.0;
     }
 
     public String getCodigoInscripcion() {
         return codigoInscripcion;
-    }
-
-    public double getNota1() {
-        return nota1;
-    }
-
-    public double getNota2() {
-        return nota2;
     }
 
     public double getNotaFinal() {
@@ -46,14 +40,6 @@ public class Calificaciones {
         this.codigoInscripcion = codigoInscripcion;
     }
 
-    public void setNota1(double nota1) {
-        this.nota1 = nota1;
-    }
-
-    public void setNota2(double nota2) {
-        this.nota2 = nota2;
-    }
-
     public void setNotaFinal(double notaFinal) {
         this.notaFinal = notaFinal;
     }
@@ -66,21 +52,73 @@ public class Calificaciones {
         this.estado = estado;
     }
 
-    public void calularPromedioFinal(){
-        double promedioFinal = (this.getNota1() * 0.50) + (this.getNota2() * 0.50);
-        this.setPromedioFinal(promedioFinal);
+    // verificar si se pueden ingresar la nota final si las demas notas ya estan ingresadas
+    public boolean  ingresarNotaFinal(Calificaciones calificaciones){
+        if (calificaciones.getNotas()[0] == 0.0 || calificaciones.getNotas()[1] == 0.0 || calificaciones.getNotas()[2] == 0.0) {
+            System.out.println("No se puede ingresar la nota final, faltan notas por ingresar.");
+            return false;
+        }else {
+            System.out.println("Puedes ingresar la nota final.");
+            return true;
+        }
     }
 
-    public EstadoCalificaiones calcularEstadoi(){
+    // calcular el promedio final
+    public double calcularPromedioFinal(){
+        double suma = 0.0;
+        for(int i = 0; i < this.getNotas().length; i++){
+            suma += this.getNotas()[i];
+        }
+        double promedio = (suma+ this.getNotaFinal())/ (this.getNotas().length + 1) ;
+        this.setPromedioFinal(promedio);
+        return promedio;
+    }
+
+    public double[] getNotas() {
+        return notas;
+    }
+
+
+    public void setNotas(double[] notas) {
+        this.notas = notas;
+    }
+
+    // calcular el estado de las calificaciones
+
+    public EstadoCalificaiones calcularEstado(){
         if(this.getPromedioFinal() < 3.0){
             System.out.println("el estudiante esta reprobado.");
             return EstadoCalificaiones.REPROBADO;
-        }else if(this.getPromedioFinal() >= 3.0){
+        }else {
             System.out.println("El estudiante paso la nota. ");
             return EstadoCalificaiones.APROBADO;
+        }
+    }
+
+    /* verificar si se puede evaluar la inscripcion o las notas del estusiante en el curso
+    * como se quiera ver
+    * */
+    public boolean sePuedEvaluar(ControlerInscripciones controlerInscripciones, ControlerCursos controlerCursos){
+        Validaciones validaciones = new Validaciones();
+        String codigo = validaciones.codigo("ingresa el codigo de la inscripcion: ");
+        Inscripcion inscripcion = controlerInscripciones.buscarInscripcion(codigo);
+        Cursos curso = controlerCursos.buscarCurso(inscripcion.getCodigoCurso());
+        if(inscripcion.getEstado() == EstadoIncripcion.ACTIVA|| curso.getCodigoProfesor() != null){
+            return true;
         }else{
-            System.out.println("el estudiante esta pendiente por notas.");
-            return EstadoCalificaiones.PENDIENTE;
+            return false;
+        }
+    }
+
+    // verificar si la nota anterior ya fue ingresada
+
+    public boolean ingresadas (int numero ){
+        if(this.getNotas()[numero-2] == 0.0) {
+            return  false;
+        }else if((numero-2) == -1){
+            return true;
+        }else{
+            return true;
         }
     }
 }

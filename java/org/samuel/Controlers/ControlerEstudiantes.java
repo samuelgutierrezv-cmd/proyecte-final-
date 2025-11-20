@@ -28,6 +28,8 @@ public class ControlerEstudiantes {
         return gestorEstudiantes;
     }
 
+    //Este metodo simplemente crea estudiantes y los agrega a la lista de estudiantes.
+
     public Validaciones getValidaciones() {
         return validaciones;
     }

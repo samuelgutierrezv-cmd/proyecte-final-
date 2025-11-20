@@ -8,19 +8,28 @@ import org.samuel.models.Inscripcion;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class ControlerInscripciones {
     private Validaciones validaciones;
     private ArrayList<Inscripcion> inscripcions;
+    private ArrayList<Estudiante>ListaDeEspera;
 
     public ControlerInscripciones() {
         this.validaciones = new Validaciones();
         this.inscripcions = new ArrayList<>();
+        this.ListaDeEspera = new ArrayList<>();
+    }
+
+    public void ingresarAListaDeEspera(Estudiante estudiante){
+        this.ListaDeEspera.add(estudiante);
     }
 
     public Validaciones getValidaciones() {
         return validaciones;
+    }
+
+    public ArrayList<Estudiante> getListaDeEspera() {
+        return ListaDeEspera;
     }
 
     public void setValidaciones(Validaciones validaciones) {
@@ -39,35 +48,83 @@ public class ControlerInscripciones {
         this.inscripcions.add(incricion);
     }
 
-    public int  registrarEstudiante( ControlerEstudiantes estudiante, ControlerCursos crso, int numeroInscritos) {
+    public void agregar(Inscripcion inscripcion){
+        this.inscripcions.add(inscripcion);
+    }
+
+
+    /*
+    * En este se crea un curso sin el profesor
+    * */
+    public void  registrarEstudiante( ControlerEstudiantes estudiante, ControlerCursos crso) {
         String codigo = this.getValidaciones().codigo("ingresa el código del estudiante al que quieres register: ");
         Estudiante estudiante1 = estudiante.getGestorEstudiantes().buscarCodigo(codigo);
-        String codigocurso = this.getValidaciones().codigo("ingresa el código del curso  al que quieres register: ");
-        Cursos curso = crso.buscarCurso(codigocurso);
-        if (crso.buscarCurso(codigocurso).getCarreraRequisito() == null || crso.buscarCurso(codigocurso).getPromedioRequisito() == 0 || crso.buscarCurso(codigocurso).getSemestreRequisito() == 0 || crso.buscarCurso(codigocurso).getCupoMaximo() == 0) {
+        String codigoCurso = this.getValidaciones().codigo("ingresa el código del curso  al que quieres register: ");
+        if (crso.buscarCurso(codigoCurso).getCarreraRequisito() == null || crso.buscarCurso(codigoCurso).getPromedioRequisito() == 0 || crso.buscarCurso(codigoCurso).getSemestreRequisito() == 0 || crso.buscarCurso(codigoCurso).getCupoMaximo() == 0) {
             System.out.println("no han definido los prerrequisitos defines y registra al estudiante");
-            return numeroInscritos;
-        } else if (curso.getHorario() == null) {
+        } else if (crso.buscarCurso(codigoCurso).getHorario() == null) {
             System.out.println("no han definido los horarios  defines y registra al estudiante");
-            return numeroInscritos;
-        } else if (curso.getCupoMaximo() == 0) {
+        } else if (crso.buscarCurso(codigoCurso).getCupoMaximo() == 0) {
             System.out.println("no han definido el cupo maximo de estudiantes: ");
-            return numeroInscritos;
-        } else if (curso.getCupoMaximo() <= curso.getNumeroInscripciones()) {
+        } else if (crso.buscarCurso(codigo).hayCuposDisponibles()) {
             System.out.println("Ya esta al tope de inscripciones");
-            return numeroInscritos;
+            System.out.println("te pondremos en lista de espera");
+            this.ingresarAListaDeEspera(estudiante1);
         } else {
-            if (estudiante1.getCarrera() == curso.getCarreraRequisito() && estudiante1.getSemestreActual() == curso.getSemestreRequisito() && estudiante1.getPromedioAcumulado() >= curso.getPromedioRequisito()) {
+            if (crso.buscarCurso(codigo).validarRequisitos(estudiante1, crso.buscarCurso(codigoCurso)) && crso.buscarCurso(codigoCurso) != null && estudiante1 != null && crso.buscarCurso(codigoCurso).getCodigoProfesor() != null ) {
                 String codigoEstudiante = estudiante1.getCodigo();
-                String codigoCurso = curso.getCodigo();
                 LocalDate  actual = LocalDate.now();
-                Inscripcion inscripcio = new Inscripcion(codigoEstudiante,actual, EstadoIncripcion.ACTIVA,codigoCurso);
-                this.setIncricion(inscripcio);
-                return numeroInscritos + 1;
+                String codigoInscripcion = this.getValidaciones().generarCodigo();
+                System.out.println("Codigo de inscripcion generado: " + codigoInscripcion + " recuerdalo muy bien lo vas a necesitar.");
+                Inscripcion inscripcion = new Inscripcion(codigoEstudiante,actual,EstadoIncripcion.ACTIVA,codigoCurso,codigoInscripcion);
+                this.setIncricion(inscripcion);
+                crso.buscarCurso(codigoCurso).addEstudiante(estudiante1);
+                crso.buscarCurso(codigoCurso).setNumeroInscripciones(crso.buscarCurso(codigoCurso).getEstudiantesInscritos().size());
+                System.out.println("El estudiante ha sido inscrito correctamente");
             }else{
+                System.out.println("Puede que el estudiante no se halla encontrado o que el curso no se halla encontrado (revisa que hallas ingresado bien el codigo) o ");
                 System.out.println("El estudiante no cumple con los requisitos");
-                return numeroInscritos;
             }
         }
+    }
+
+    /*Elimina una inscripcion que no este activa.
+    * */
+
+    public void eliminarInscripcion(){
+        String codigo = this.getValidaciones().codigo("ingresa el codigo de la inscripcion: ");
+        for(int i = 0; i < this.getInscripcions().size(); i++) {
+            if (this.getInscripcions().get(i).getCodigoInscripcion().equalsIgnoreCase(codigo) && this.getInscripcions().get(i).getEstado() != EstadoIncripcion.ACTIVA && this.getInscripcions().get(i)!= null) {
+                this.getInscripcions().remove(i);
+                System.out.println("La inscripcion ha sido eliminada correctamente.");
+            } else {
+                System.out.println("La inscripcion no ha sido encontrada, revisa el codigo.");
+            }
+        }
+    }
+
+    /*
+    * esta busca la inscripcion.
+    * */
+
+    public Inscripcion buscarInscripcion(String codigo){
+        Inscripcion inscripcion = null;
+        for(int i = 0; i < this.getInscripcions().size(); i++) {
+            if (this.getInscripcions().get(i).getCodigoInscripcion().equalsIgnoreCase(codigo) ) {
+                inscripcion = this.getInscripcions().get(i);
+            }
+        }
+        return inscripcion;
+    }
+
+    //hace como un asesoramiento a ver si el estudiante ceumple con todo y si hay cupos.
+
+    public void validarCuposYRequisitos(GestorEstudiantes gestorEstudiantes,ControlerCursos controlerCursos){
+        String codigoProfesor = this.getValidaciones().codigo("ingresa el codigo del estudiante: ");
+        Estudiante estudiante = gestorEstudiantes.buscarCodigo(codigoProfesor);
+        String codigoCruso = this.getValidaciones().codigo("ingresa el codigo del curso");
+        Cursos curso = controlerCursos.buscarCurso(codigoCruso);
+        curso.validarRequisitos(estudiante,curso);
+        boolean coolean = curso.hayCuposDisponibles();
     }
 }

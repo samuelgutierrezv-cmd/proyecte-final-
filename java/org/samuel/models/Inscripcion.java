@@ -6,14 +6,18 @@ import java.time.LocalDate;
 public class Inscripcion {
     private String codigoEstudiante;
     private String codigoCurso;
+    private String codigoInscripcion;
     private LocalDate fechaInscripcion;
     private EstadoIncripcion estado;
+    private Calificaciones calificaciones;
 
-    public Inscripcion(String codigoEstudiante, LocalDate fechaInscripcion, EstadoIncripcion estado, String codigoCurso) {
+    public Inscripcion(String codigoEstudiante, LocalDate fechaInscripcion, EstadoIncripcion estado, String codigoCurso, String codigoInscripcion) {
         this.codigoEstudiante = codigoEstudiante;
         this.fechaInscripcion = fechaInscripcion;
         this.estado = estado;
         this.codigoCurso = codigoCurso;
+        this.codigoInscripcion = codigoInscripcion;
+        this.calificaciones = new Calificaciones(codigoInscripcion);
     }
 
     public String getCodigoEstudiante() {
@@ -46,5 +50,23 @@ public class Inscripcion {
 
     public void setFechaInscripcion(LocalDate fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
+    }
+
+    public String getCodigoInscripcion() {
+        return codigoInscripcion;
+    }
+
+    public void setCodigoInscripcion(String codigoInscripcion) {
+        this.codigoInscripcion = codigoInscripcion;
+    }
+
+
+
+    public Calificaciones getCalificaciones() {
+        return calificaciones;
+    }
+
+    public void setCalificaciones(Calificaciones calificaciones) {
+        this.calificaciones = calificaciones;
     }
 }

@@ -3,41 +3,18 @@ import org.samuel.Validador.Carreras;
 
 import java.time.LocalDate;
 
-public class Estudiante {
-    private String codigo;
-    private String nombres;
-    private String apellidos;
-    private String email;
+public class Estudiante extends  Persona{
     private LocalDate fechaNacimiento;
     private Carreras carrera;
     private double promedioAcumulado;
     private int semestreActual;
 
     public Estudiante(String codigo, Carreras carrera, int semestreActual, String email, LocalDate fechaNacimiento, String apellidos, String nombres) {
-        this.codigo = codigo;
+        super(nombres,apellidos,email,codigo);
         this.carrera = carrera;
         this.promedioAcumulado = promedioAcumulado;
         this.semestreActual = semestreActual;
-        this.email = email;
         this.fechaNacimiento = fechaNacimiento;
-        this.apellidos = apellidos;
-        this.nombres = nombres;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public String getNombres() {
-        return nombres;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public Carreras getCarrera() {
@@ -56,22 +33,6 @@ public class Estudiante {
         return semestreActual;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public void setCarrera(Carreras carrera) {
         this.carrera = carrera;
     }
@@ -88,9 +49,11 @@ public class Estudiante {
         this.promedioAcumulado = promedioAcumulado;
     }
 
+    //Este metodo muestra la informacion del estuadiante que selecciones con el controler
+
     public void informacion() {
         System.out.println("==========Information de estudiante=============");
-        System.out.println("nombre del estudiante: " + this.getNombres());
+        System.out.println("nombre del estudiante: " + this.getNombre());
         System.out.println("apellidos de estudiantes: " + this.getApellidos());
         System.out.println("código del estudiante: " + this.getCodigo());
         System.out.println("estudia la carrera  : "  + this.getCarrera());

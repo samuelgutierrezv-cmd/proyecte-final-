@@ -1,6 +1,9 @@
 package org.samuel.Views;
 
 public class Vistas {
+
+    //Vista principal de opciones
+
     public void principal(){
         System.out.println("""
                 ================================================================
@@ -16,18 +19,23 @@ public class Vistas {
                 ================================================================
                 """);
     }
+
+    //vista principal de lo que se puede hacer con los estudiantes
+
     public void gestionDeEstudiantes(){
         System.out.println("""
                 =================================================================
                 =                   Gestion de estudiantes                      =
                 =================================================================
                 =              1. Registrar nuevos estudiantes                  =
-                =       2. Buscar estudiantes por código, nombre o carrera      =
+                =             2. Buscar estudiantes por código                  =
                 =           3. Actualizar información de estudiantes            =
                 =         4. Listar estudiantes por diferentes criterios        =
                 =================================================================
                 """);
     }
+
+    //vista principal de lo que se puede hacer con los PROFESORES
     public void gestionDeProfesor(){
         System.out.println("""
                 =================================================================
@@ -39,6 +47,9 @@ public class Vistas {
                 =================================================================
                 """);
     }
+
+    //vista principal de lo que se puede hacer con los CURSOS
+
     public void gestionDeCursos(){
         System.out.println("""
                 =================================================================
@@ -50,6 +61,9 @@ public class Vistas {
                 =================================================================
                 """);
     }
+
+    //vista principal de lo que se puede hacer con los INSCRIPCIONES
+
     public void gestionDeInscripciones(){
         System.out.println("""
                 =================================================================
@@ -57,30 +71,34 @@ public class Vistas {
                 =================================================================
                 =             1. Inscribir estudiantes en cursos                =
                 =             2. Validar prerrequisitos y cupos                 =
-                =       3. Generar lista de espera cuando sea necesario         =
                 =================================================================
                 """);
     }
+
+    //vista principal de lo que se puede hacer con las Calificaciones
+
     public void gestionDeCalificaiones(){
         System.out.println("""
                 =================================================================
                 =                Gestión de Calificaciones                      =
                 =================================================================
                 =         1. Registrar calificaciones por parciales             =
-                =           2. Calcular promedios automáticamente               =
-                =       3. Determinar estado académico (aprobado/reprobado)     =
+                =           2.     ingresar nota final                          =
+                =           3. Calcular promedios automáticamente               =
+                =       4. Determinar estado académico (aprobado/reprobado)     =
                 =================================================================
                 """);
     }
+
+    //Toda la information que se puede consultar.
+
     public void reportesYConsultas(){
         System.out.println("""
                 =================================================================
-                =                   Reportes y Consultas                        =
+                =                   Reported y Consultas                        =
                 =================================================================
-                =        1. Estudiantes con mejor rendimiento académico         =
-                =                 2.Cursos con mayor demanda                    =
-                =           3. Profesores con más carga académica               =
-                =            4. Estadísticas por carrera y semestre             =
+                =                 1.Cursos con mayor demanda                    =
+                =           2. Profesores con más carga académica               =
                 =================================================================
                 """);
     }

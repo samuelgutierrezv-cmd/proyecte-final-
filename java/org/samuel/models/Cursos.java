@@ -8,10 +8,11 @@ public class Cursos {
     private String nombre;
     private int creditos;
     private int cupoMaximo;
-    private String codigoProfesor;private String horario;
+    private Profesor codigoProfesor;
+    private String[] horario;
     private int numeroInscripciones;
     private int numeroHorasSemestre;
-    private String salon;
+    private int salon;
     private double promedioRequisito;
     private int semestreRequisito;
     private Carreras carreraRequisito;
@@ -26,10 +27,11 @@ public class Cursos {
         this.cupoMaximo = 0;
         this.semestreRequisito = 0;
         this.promedioRequisito= 0;
-        this.salon = null;
-        this.horario = null;
+        this.salon = 0;
+        this.horario = new String[5];
         this.carreraRequisito = null;
         this.estudiantesInscritos = new ArrayList<>();
+        this.codigoProfesor = null;
     }
 
     public void setNumeroHorasSemestre(int numeroHorasSemestre) {
@@ -56,15 +58,15 @@ public class Cursos {
         return cupoMaximo;
     }
 
-    public String getCodigoProfesor() {
+    public Profesor getCodigoProfesor() {
         return codigoProfesor;
     }
 
-    public String getHorario() {
+    public String[] getHorario() {
         return horario;
     }
 
-    public String getSalon() {
+    public int getSalon() {
         return salon;
     }
 
@@ -80,7 +82,7 @@ public class Cursos {
         this.creditos = creditos;
     }
 
-    public void setCodigoProfesor(String codigoProfesor) {
+    public void setCodigoProfesor(Profesor codigoProfesor) {
         this.codigoProfesor = codigoProfesor;
     }
 
@@ -89,7 +91,7 @@ public class Cursos {
     }
 
 
-    public void setHorario(String horario) {
+    public void setHorario(String[] horario) {
         this.horario = horario;
     }
 
@@ -133,9 +135,14 @@ public class Cursos {
         this.numeroInscripciones = numeroInscripciones;
     }
 
-    public void setSalon(String salon) {
+    public void addEstudiante(Estudiante estudiante){
+        this.estudiantesInscritos.add(estudiante);
+    }
+    public void setSalon(int salon) {
         this.salon = salon;
     }
+
+    // suelta true o false si el curso tiene cupos disponibles
 
     public boolean hayCuposDisponibles(){
         if(this.getCupoMaximo() == this.getNumeroInscripciones()){
@@ -144,6 +151,18 @@ public class Cursos {
         }else{
             System.out.println("Si hay cupos disponibles.");
             return true;
+        }
+    }
+
+    //Este hace lo mismo pero con los requisitos
+
+    public boolean validarRequisitos(Estudiante estudiante, Cursos curso){
+        if(estudiante.getCarrera() == curso.getCarreraRequisito() &&
+           estudiante.getSemestreActual() == curso.getSemestreRequisito() &&
+           estudiante.getPromedioAcumulado() >= curso.getPromedioRequisito()){
+            return true;
+        }else {
+            return false;
         }
     }
 }

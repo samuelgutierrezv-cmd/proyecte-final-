@@ -13,19 +13,19 @@ import java.util.regex.Pattern;
 public class Validaciones{
     public String validarTexto(String mensaje){
         boolean valid = true;
-        String string = "";
+        String texto = "";
         while(valid){
-            string = texto(mensaje).trim();
-            if(string ==null || string.isEmpty() || string.length() <= 2  ){
+            texto = texto(mensaje).trim();
+            if(texto ==null || texto.isEmpty() || texto.length() <= 2  ){
                 System.out.println("invalid  ingresa de nuevo: ");
             }else{
                 valid= false;
             }
         }
-        return string;
+        return texto;
     }
     public Carreras ingresarCarrera(){
-        String carreras =  "";
+        String carreras =  null;
         Carreras carrera = null;
         boolean validador = true;
         System.out.println("---------CARRERAS DE LA UNIVERSIDAD---------");
@@ -44,44 +44,44 @@ public class Validaciones{
         System.out.println(Carreras.MEDICINA);
         while(validador){
             carreras = validarTexto("ingresa la carrera del estudiante: ");
-            carreras.replace(" ","");
-            if(carreras.equalsIgnoreCase(String.valueOf(Carreras.INGENIERIACIVIL))){
+            String carreras2 = carreras.replace(" ","");
+            if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.INGENIERIACIVIL))){
                 carrera = Carreras.INGENIERIACIVIL;
                 validador = false;
-            }else if(carreras.equalsIgnoreCase(String.valueOf(Carreras.ADMINISTRACION))){
+            }else if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.ADMINISTRACION))){
                 carrera=  Carreras.ADMINISTRACION;
                 validador = false;
-            }else if(carreras.equalsIgnoreCase(String.valueOf(Carreras.CONTADURIA))){
+            }else if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.CONTADURIA))){
                 carrera = Carreras.CONTADURIA;
                 validador = false;
-            }else if(carreras.equalsIgnoreCase(String.valueOf(Carreras.INGENIERIADESISTEMAS))){
+            }else if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.INGENIERIADESISTEMAS))){
                 carrera  = Carreras.INGENIERIADESISTEMAS;
                 validador = false;
-            }else if(carreras.equalsIgnoreCase(String.valueOf(Carreras.ARQUITECTURA))){
+            }else if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.ARQUITECTURA))){
                 carrera =  Carreras.ARQUITECTURA;
                 validador = false;
-            }else if(carreras.equalsIgnoreCase(String.valueOf(Carreras.MEDICINA))){
+            }else if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.MEDICINA))){
                 carrera =  Carreras.MEDICINA;
                 validador = false;
-            }else if(carreras.equalsIgnoreCase(String.valueOf(Carreras.INGENIERIAELECTRICA))) {
+            }else if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.INGENIERIAELECTRICA))) {
                 carrera =  Carreras.INGENIERIAELECTRICA;
                 validador = false;
-            }else if(carreras.equalsIgnoreCase(String.valueOf(Carreras.LICENCIATURAENEDUCACION))) {
+            }else if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.LICENCIATURAENEDUCACION))) {
                 carrera =  Carreras.LICENCIATURAENEDUCACION;
                 validador = false;
-            }else if(carreras.equalsIgnoreCase(String.valueOf(Carreras.DERECHO))) {
+            }else if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.DERECHO))) {
                 carrera =  Carreras.DERECHO;
                 validador = false;
-            }else if(carreras.equalsIgnoreCase(String.valueOf(Carreras.PSICOLOGIA))) {
+            }else if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.PSICOLOGIA))) {
                 carrera =  Carreras.PSICOLOGIA;
                 validador = false;
-            }else if(carreras.equalsIgnoreCase(String.valueOf(Carreras.PERIODISMO))) {
+            }else if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.PERIODISMO))) {
                 carrera =  Carreras.PERIODISMO;
                 validador = false;
-            }else if(carreras.equalsIgnoreCase(String.valueOf(Carreras.LICENCIATURAENESCRITURA))) {
+            }else if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.LICENCIATURAENESCRITURA))) {
                 carrera =  Carreras.LICENCIATURAENESCRITURA;
                 validador = false;
-            }else if(carreras.equalsIgnoreCase(String.valueOf(Carreras.LICENCIATURAENMATEMATICAS))) {
+            }else if(carreras2.equalsIgnoreCase(String.valueOf(Carreras.LICENCIATURAENMATEMATICAS))) {
                 carrera =  Carreras.LICENCIATURAENMATEMATICAS;
                 validador = false;
             }else{
@@ -116,6 +116,21 @@ public class Validaciones{
         }
         return codigo;
     }
+
+    public double rangoDecimal(double r1, double r2, String mensaje){
+        boolean valid = true;
+        double numero = 0;
+        while(valid){
+            numero = entero(mensaje);
+            if(numero < r1 || numero > r2){
+                System.out.println("Invalido no esta dentro del rango");
+            }else{
+                valid = false;
+            }
+        }
+        return numero;
+    }
+
     public int rango(int r1, int r2, String mensaje){
         boolean valid = true;
         int numero = 0;
@@ -129,6 +144,7 @@ public class Validaciones{
         }
         return numero;
     }
+
     public LocalDate fecha(String mensaje){
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/AAAA");
         String fecha = "";
@@ -137,12 +153,7 @@ public class Validaciones{
             try{
                 LocalDate fechaFor = LocalDate.parse(fecha,dateTimeFormatter);
                 LocalDate hoy = LocalDate.now();
-                double anos = ChronoUnit.YEARS.between(fechaFor,hoy);
-                if(anos < 16){
-                    System.out.println("el estudiante no puede ser menor de 16 años");
-                }else{
-                    return fechaFor;
-                }
+                return fechaFor;
             }catch (DateTimeException e){
                 System.out.println("formato invalido debes ingresarlo en formato dd/mm/aaaa");
             }
@@ -179,5 +190,13 @@ public class Validaciones{
         Scanner sc = new Scanner(System.in);
         System.out.println(mensaje);
         return sc.nextFloat();
+    }
+    public  String generarCodigo() {
+        StringBuilder codigo = new StringBuilder();
+        for (int i = 0; i < 5; i++) {
+            int numero = (int) (Math.random() * 10); // genera un número entre 0 y 9
+            codigo.append(numero);
+        }
+        return codigo.toString();
     }
 }
