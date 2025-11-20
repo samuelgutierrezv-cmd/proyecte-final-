@@ -125,7 +125,7 @@ public class Main {
                             informacion.profesoresMayorCarga(controlerProfesores);
                             break;
                         case 2:
-
+                            informacion.cursosMayorDemanda(controlerCursos);
                             break;
                     }
                     break;
